@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <RootNamespace>DeliveryParcel.Domain</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>12.0</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Ссылка на общий проект (если есть) -->
+    <ProjectReference Include="..\..\Common\DeliveryParcel.Common\DeliveryParcel.Common.csproj" />
+
+    <!-- Ссылка на ValueObjects -->
+    <ProjectReference Include="..\DeliveryParcel.ValueObjects\DeliveryParcel.ValueObjects.csproj" />
+  </ItemGroup>
+
+</Project>
