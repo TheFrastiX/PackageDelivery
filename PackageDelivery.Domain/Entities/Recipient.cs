@@ -1,110 +1,58 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DeliveryParcel.Domain.ValueObjects;
 using DeliveryParcel.Domain.Entities.Base;
 
 namespace DeliveryParcel.Domain.Entities
 {
     /// <summary>
-    /// Представляет получателя посылки в системе доставки.
+    /// Представляет получателя посылки.
     /// </summary>
     public class Recipient : Entity<Guid>
     {
-        #region Properties
-
-        /// <summary>
-        /// Имя получателя.
-        /// </summary>
         public string FirstName { get; private set; }
-
-        /// <summary>
-        /// Фамилия получателя.
-        /// </summary>
         public string LastName { get; private set; }
-
-        /// <summary>
-        /// Номер телефона получателя.
-        /// </summary>
-        public string PhoneNumber { get; private set; }
-
-        /// <summary>
-        /// Электронная почта получателя.
-        /// </summary>
+        public PhoneNumber PhoneNumber { get; private set; }
+        public Address Address { get; private set; }
         public string Email { get; private set; }
-
-        /// <summary>
-        /// Уникальный ID отправителя (для связи).
-        /// </summary>
-        public Guid SenderId { get; private set; }
-
-        #endregion
-
-        #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Recipient"/> class.
         /// </summary>
-        /// <param name="id">Уникальный идентификатор получателя.</param>
-        /// <param name="firstName">Имя получателя.</param>
-        /// <param name="lastName">Фамилия получателя.</param>
-        /// <param name="phoneNumber">Номер телефона получателя.</param>
-        /// <param name="email">Электронная почта получателя.</param>
-        /// <param name="senderId">Уникальный ID отправителя.</param>
         public Recipient(
             Guid id,
             string firstName,
             string lastName,
-            string phoneNumber,
-            string email,
-            Guid senderId)
+            PhoneNumber phoneNumber,
+            Address address,
+            string email)
             : base(id)
         {
             FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
             LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));
             PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
+            Address = address ?? throw new ArgumentNullException(nameof(address));
             Email = email ?? throw new ArgumentNullException(nameof(email));
-            SenderId = senderId;
         }
 
-        // Для EF Core
+        /// <summary>
+        /// Защищённый конструктор для EF Core.
+        /// </summary>
         protected Recipient() : base()
         {
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// Обновляет контактную информацию получателя.
         /// </summary>
-        /// <param name="firstName">Новое имя.</param>
-        /// <param name="lastName">Новая фамилия.</param>
-        /// <param name="phoneNumber">Новый номер телефона.</param>
-        /// <param name="email">Новый адрес электронной почты.</param>
-        public void UpdateContactInfo(
-            string firstName,
-            string lastName,
-            string phoneNumber,
-            string email)
-        {
-            FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
-            LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));
-            PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
-            Email = email ?? throw new ArgumentNullException(nameof(email));
-        }
-
-        /// <summary>
-        /// Обновляет только номер телефона и адрес электронной почты.
-        /// </summary>
-        /// <param name="phoneNumber">Новый номер телефона.</param>
-        /// <param name="email">Новый адрес электронной почты.</param>
-        public void UpdateBasicContactInfo(string phoneNumber, string email)
+        public void UpdateContactInfo(PhoneNumber phoneNumber, Address address, string email)
         {
             PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
+            Address = address ?? throw new ArgumentNullException(nameof(address));
             Email = email ?? throw new ArgumentNullException(nameof(email));
         }
-
-        #endregion
     }
 }
