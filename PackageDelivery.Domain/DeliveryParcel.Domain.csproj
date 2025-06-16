@@ -10,10 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Ссылка на общий проект (если есть) -->
-    <ProjectReference Include="..\..\Common\DeliveryParcel.Common\DeliveryParcel.Common.csproj" />
+    <ProjectReference Include="..\DeliveryParcel.Common\DeliveryParcel.Common.csproj" />
 
-    <!-- Ссылка на ValueObjects -->
     <ProjectReference Include="..\DeliveryParcel.ValueObjects\DeliveryParcel.ValueObjects.csproj" />
   </ItemGroup>
 
