@@ -4,57 +4,68 @@ using System.Linq;
 
 namespace DeliveryParcel.Domain.ValueObjects
 {
-    public class Address 
+    /// <summary>
+    /// Представляет адрес как неизменяемый объект.
+    /// </summary>
+    public class Address : ValueObject
     {
-
-        public string City { get; }
         public string Street { get; }
+        public string City { get; }
         public string PostalCode { get; }
         public string? Apartment { get; }
         public string? Notes { get; }
+
+        /// <summary>
+        /// Создает новый экземпляр класса Address.
+        /// </summary>
         public Address(
-            string city,
             string street,
+            string city,
             string postalCode,
             string? apartment = null,
             string? notes = null)
         {
-            if (string.IsNullOrWhiteSpace(city))
-                throw new ArgumentException("City is required.", nameof(city));
-
             if (string.IsNullOrWhiteSpace(street))
-                throw new ArgumentException("Street is required.", nameof(street));
+                throw new ArgumentNullException(nameof(street));
+
+            if (string.IsNullOrWhiteSpace(city))
+                throw new ArgumentNullException(nameof(city));
 
             if (string.IsNullOrWhiteSpace(postalCode))
-                throw new ArgumentException("Postal code is required.", nameof(postalCode));
+                throw new ArgumentNullException(nameof(postalCode));
 
-            City = city;
             Street = street;
+            City = city;
             PostalCode = postalCode;
             Apartment = apartment;
             Notes = notes;
         }
 
-
+        /// <summary>
+        /// Создает объект Address из строки формата: "город, улица, индекс, кв. 45 (оставить у двери)"
+        /// </summary>
         public static Address FromString(string addressString)
         {
-            var parts = addressString.Split(new[] { ", " }, StringSplitOptions.None);
+            var parts = addressString
+                .Split(new[] { ", " }, StringSplitOptions.None)
+                .Select(p => p.Trim())
+                .ToList();
 
-            if (parts.Length < 3)
-                throw new ArgumentException("Invalid address format. Expected at least city, street and postal code.");
+            if (parts.Count < 3)
+                throw new FormatException("Неверный формат адреса. Ожидается минимум: город, улица, индекс");
 
-            string city = parts[0].Trim();
-            string street = parts[1].Trim();
-            string postalCode = parts[2].Trim();
+            string city = parts[0];
+            string street = parts[1];
+            string postalCode = parts[2];
 
             string? apartment = null;
             string? notes = null;
 
-            for (int i = 3; i < parts.Length; i++)
+            for (int i = 3; i < parts.Count; i++)
             {
-                var part = parts[i].Trim();
+                var part = parts[i];
 
-                if (part.StartsWith("кв.") || part.StartsWith("apt.") || part.StartsWith("ап.")) // Поддержка разных форматов
+                if (part.StartsWith("кв.") || part.StartsWith("apt.") || part.StartsWith("ап.")) // поддержка нескольких форматов
                 {
                     apartment = part.Substring(3).TrimStart(' ', '.');
                 }
@@ -64,14 +75,14 @@ namespace DeliveryParcel.Domain.ValueObjects
                 }
                 else
                 {
-                    // Если это не квартира или заметка — добавляем к адресу
+                    // если это не квартира или примечание — добавляем к улице
                     street += $", {part}";
                 }
             }
 
             return new Address(
-                city: city,
                 street: street,
+                city: city,
                 postalCode: postalCode,
                 apartment: apartment,
                 notes: notes);
@@ -81,38 +92,12 @@ namespace DeliveryParcel.Domain.ValueObjects
                                    (Apartment != null ? $", кв. {Apartment}" : "") +
                                    (Notes != null ? $" ({Notes})" : "");
 
-
-        protected virtual IEnumerable<object> GetEqualityComponents()
+        protected override IEnumerable<object> GetEqualityComponents()
         {
-            yield return City;
             yield return Street;
+            yield return City;
             yield return PostalCode;
             yield return Apartment ?? string.Empty;
-        }
-
-
-        public override bool Equals(object? obj)
-        {
-            if (obj == null || obj.GetType() != GetType())
-                return false;
-
-            var other = (Address)obj;
-
-            return GetEqualityComponents().SequenceEqual(other.GetEqualityComponents());
-        }
-
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hash = 17;
-                foreach (var component in GetEqualityComponents())
-                {
-                    hash = hash * 23 + component?.GetHashCode() ?? 0;
-                }
-                return hash;
-            }
         }
 
         public override string ToString() => FullAddress;
