@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <RootNamespace>DeliveryParcel.Application</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>12.0</LangVersion>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- NuGet-пакеты -->
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="MediatR" Version="12.0.1" />
+    <PackageReference Include="MassTransit" Version="8.3.1" />
+    <PackageReference Include="Serilog" Version="3.1.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Ссылки на другие проекты -->
+    <ProjectReference Include="..\DeliveryParcel.Domain\DeliveryParcel.Domain.csproj" />
+    <ProjectReference Include="..\DeliveryParcel.Application.Models\DeliveryParcel.Application.Models.csproj" />
+    <ProjectReference Include="..\DeliveryParcel.Domain.Repositories.Abstractions\DeliveryParcel.Domain.Repositories.Abstractions.csproj" />
+    <ProjectReference Include="..\DeliveryParcel.Domain.Services\DeliveryParcel.Domain.Services.csproj" />
+    <ProjectReference Include="..\DeliveryParcel.Domain.ValueObjects\DeliveryParcel.Domain.ValueObjects.csproj" />
+  </ItemGroup>
+
+</Project>
