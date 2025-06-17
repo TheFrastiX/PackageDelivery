@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <RootNamespace>DeliveryParcel.Application.Models</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>12.0</LangVersion>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\net8.0\DeliveryParcel.Application.Models.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\net8.0\DeliveryParcel.Application.Models.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Ссылки на другие проекты (если есть) -->
+    <!-- Например: если используются общие типы или домен -->
+    <!--
+    <ProjectReference Include="..\..\Common\DeliveryParcel.Common\DeliveryParcel.Common.csproj" />
+    <ProjectReference Include="..\..\Domain\DeliveryParcel.Domain\DeliveryParcel.Domain.csproj" />
+    -->
+  </ItemGroup>
+
+</Project>
