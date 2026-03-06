@@ -1,28 +1,6 @@
 using HotelBooking.Domain;
 using HotelBooking.Domain.Exceptions;
 using HotelBooking.ValueObjects;
-using HotelBooking.Infrastructure;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using HotelBooking.Infrastructure.Data;
-
-var builder = WebApplication.CreateBuilder(args);
-
-// Добавляем Infrastructure слой (DbContext и репозитории)
-builder.Services.AddInfrastructure(builder.Configuration);
-
-var app = builder.Build();
-
-// Создаём базу данных (для разработки)
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<HotelBookingDbContext>();
-    dbContext.Database.EnsureCreated();
-}
-
-// ============================================
-// Demo код (можно удалить после тестирования)
-// ============================================
 
 Console.WriteLine("HotelBooking Domain Demo\n");
 
