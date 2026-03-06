@@ -1,23 +1,39 @@
-public abstract class ValueObject<T>(IValidator<T> validator, T value)
+using HotelBooking.ValueObjects.Exceptions;
+
+namespace HotelBooking.ValueObjects.Base;
+
+public abstract class ValueObject<T> : IEquatable<ValueObject<T>>
 {
-    public T Value { get; } = Validate(validator, value);
-    
-    private static T Validate(IValidator<T> validator, T value)
+    public T Value { get; }
+
+    protected ValueObject(IValidator<T> validator, T value)
     {
-        if (value is null) throw new ArgumentNullValueException(nameof(value));
+        if (validator == null)
+            throw new ValidatorNullException(nameof(validator));
         validator.Validate(value);
-        return value;
+        Value = value;
     }
-    
-    public override bool Equals(object? obj) => 
-        obj is ValueObject<T> other && EqualityComparer<T>.Default.Equals(Value, other.Value);
-    
-    public override int GetHashCode() => 
-        EqualityComparer<T>.Default.GetHashCode(Value);
-    
-    public static bool operator ==(ValueObject<T>? left, ValueObject<T>? right) => 
-        Equals(left, right);
-    
-    public static bool operator !=(ValueObject<T>? left, ValueObject<T>? right) => 
-        !Equals(left, right);
+
+    public override string ToString()
+        => Value!.ToString() ?? GetType().ToString();
+
+    public override int GetHashCode()
+        => Value!.GetHashCode();
+
+    public override bool Equals(object? other)
+        => Equals(other as ValueObject<T>);
+
+    public bool Equals(ValueObject<T>? other)
+    {
+        if (other is null) return false;
+        if (ReferenceEquals(this, other)) return true;
+        if (GetType() != other.GetType()) return false;
+        return other.Value!.Equals(Value);
+    }
+
+    public static bool operator ==(ValueObject<T>? left, ValueObject<T>? right)
+        => Equals(left, right);
+
+    public static bool operator !=(ValueObject<T>? left, ValueObject<T>? right)
+        => !(left == right);
 }
