@@ -62,7 +62,7 @@ public class BookingConfiguration : IEntityTypeConfiguration<Booking>
                 .HasMaxLength(RoomNumberValidator.MAX_LENGTH);
         });
 
-        // Простые свойства
+        // Простые свойства с конвертацией DateTime в UTC
         builder.Property(b => b.CreationDate)
             .IsRequired()
             .HasConversion(
@@ -82,7 +82,7 @@ public class BookingConfiguration : IEntityTypeConfiguration<Booking>
             .IsRequired()
             .HasConversion<string>();
 
-        // Игнорируем навигационное свойство (настраивается через FK)
+        // Игнорируем навигационное свойство
         builder.Ignore(b => b.Guest);
     }
 }
