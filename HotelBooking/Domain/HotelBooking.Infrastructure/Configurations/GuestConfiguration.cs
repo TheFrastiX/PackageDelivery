@@ -13,31 +13,32 @@ public class GuestConfiguration : IEntityTypeConfiguration<Guest>
         builder.HasKey(g => g.Id);
         builder.Property(g => g.Id).IsRequired();
 
-        // Value Object: GuestName
-        builder.OwnsOne(g => g.Name, name =>
-        {
-            name.Property(n => n.Value)
-                .HasColumnName("Name")
-                .IsRequired()
-                .HasMaxLength(GuestNameValidator.MAX_LENGTH);
-        });
+        // Value Object: GuestName с конвертацией
+        builder.Property(g => g.Name)
+            .IsRequired()
+            .HasConversion(
+                name => name.Value,
+                str => new GuestName(str))
+            .HasMaxLength(GuestNameValidator.MAX_LENGTH)
+            .HasColumnName("Name");
 
-        // Value Object: Email
-        builder.OwnsOne(g => g.Email, email =>
-        {
-            email.Property(e => e.Value)
-                .HasColumnName("Email")
-                .IsRequired()
-                .HasMaxLength(EmailValidator.MAX_LENGTH);
-        });
+        // Value Object: Email с конвертацией
+        builder.Property(g => g.Email)
+            .IsRequired()
+            .HasConversion(
+                email => email.Value,
+                str => new Email(str))
+            .HasMaxLength(EmailValidator.MAX_LENGTH)
+            .HasColumnName("Email");
 
-        // Навигационное свойство к броням
-        builder.HasMany(g => g.Bookings)
+        // Навигационное свойство к броням (через приватное поле)
+        builder.HasMany<Booking>("_bookings")
             .WithOne(b => b.Guest)
             .HasForeignKey("GuestId")
+            .HasPrincipalKey(g => g.Id)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Игнорируем свойство (доступ через навигацию)
+        // Игнорируем публичное свойство
         builder.Ignore(g => g.Bookings);
     }
 }
