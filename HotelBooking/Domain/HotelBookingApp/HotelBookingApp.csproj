@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HotelBooking.Domain\HotelBooking.Domain.csproj" />
+    <ProjectReference Include="..\HotelBooking.ValueObjects\HotelBooking.ValueObjects.csproj" />
+    <ProjectReference Include="..\HotelBooking.Domain.Repositories.Abstractions\HotelBooking.Domain.Repositories.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
